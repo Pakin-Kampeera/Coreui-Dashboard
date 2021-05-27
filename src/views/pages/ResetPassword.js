@@ -13,7 +13,7 @@ import {
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import axios from "axios";
+import axios from "../../axios-data";
 import { useHistory, useParams } from "react-router-dom";
 
 const ForgotPassword = () => {
@@ -26,7 +26,7 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     if (localStorage.getItem("authToken")) {
-      // props.history.push("/");
+      //history.push("/");
     }
   }, []);
 
@@ -45,7 +45,7 @@ const ForgotPassword = () => {
         setError("");
       }, 5000);
     }
-    alert(`api/auth/resetPassword/${params.token}`);
+    
     try {
       const { data } = await axios.put(
         `api/auth/resetPassword/${params.token}`,

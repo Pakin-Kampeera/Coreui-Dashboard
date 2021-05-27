@@ -43,13 +43,13 @@ class App extends Component {
             <Route
               exact
               path="/forgotPassword"
-              name="Home"
+              name="Forgot Password Page"
               render={(props) => <ForgotPassword {...props} />}
             />
             <Route
               exact
               path="/resetPassword/:token"
-              name="Home"
+              name="Reset Password Page"
               render={(props) => <ResetPassword {...props} />}
             />
             {/* <Route

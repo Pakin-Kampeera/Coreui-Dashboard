@@ -15,7 +15,7 @@ import {
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import axios from "axios";
+import axios from "../../axios-data";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");

@@ -13,7 +13,7 @@ import {
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import axios from "axios";
+import axios from "../../axios-data";
 import { useHistory } from "react-router-dom";
 
 const ForgotPassword = () => {
@@ -37,7 +37,11 @@ const ForgotPassword = () => {
     };
 
     try {
-      const { data } = await axios.post("api/auth/forgotPassword", { email }, config);
+      const { data } = await axios.post(
+        "api/auth/forgotPassword",
+        { email },
+        config
+      );
       history.replace("/login");
     } catch (error) {
       setError(error.response.data.error);
@@ -56,8 +60,12 @@ const ForgotPassword = () => {
               <CCardBody className="p-4">
                 <CForm onSubmit={forgotPasswordHandler}>
                   {error && <span>{error}</span>}
-                  <h1>Forget Password</h1>
-                  <p className="text-muted">Create your account</p>
+                  <h1>Forgot Password</h1>
+                  <p className="text-muted">
+                    Please enter thr email address you register your account
+                    with. We will send you reset password confirmation to this
+                    email.
+                  </p>
                   <CInputGroup className="mb-3">
                     <CInputGroupPrepend>
                       <CInputGroupText>@</CInputGroupText>

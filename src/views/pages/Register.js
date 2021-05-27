@@ -13,7 +13,7 @@ import {
   CRow,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import axios from "axios";
+import axios from "../../axios-data";
 import { useHistory } from "react-router-dom";
 
 const Register = () => {
