@@ -16,6 +16,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import axios from "../../axios-data";
+import picture from "src/img/img1.jpg";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
@@ -58,7 +59,7 @@ const Login = (props) => {
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
-          <CCol md="8">
+          <CCol md="9" lg="7" xl="6">
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
@@ -96,50 +97,27 @@ const Login = (props) => {
                     <p className="text-muted">
                       {error && <span>{error}</span>}
                     </p>
+                    <CButton color="primary" block type="submit">
+                      Login
+                    </CButton>
                     <CRow>
-                      <CCol xs="6">
-                        <CButton color="primary" className="px-4" type="submit">
-                          Login
-                        </CButton>
-                      </CCol>
-                      <CCol xs="6" className="text-right">
-                        <CButton
-                          color="link"
-                          className="px-0"
-                          onClick={() => history.push("/forgotPassword")}
-                        >
-                          Forgot password?
-                        </CButton>
+                      <CCol>
+                        <Link to="/forgotPassword">
+                          <CButton color="link" className="pt-4 pl-0">
+                            Forgot password?
+                          </CButton>
+                        </Link>
                       </CCol>
                     </CRow>
-                  </CForm>
-                </CCardBody>
-              </CCard>
-              <CCard
-                className="text-white bg-primary py-5 d-md-down-none"
-                style={{ width: "44%" }}
-              >
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </p>
+                    <span className="text-muted">Don't have account? </span>
                     <Link to="/register">
-                      <CButton
-                        color="primary"
-                        className="mt-3"
-                        active
-                        tabIndex={-1}
-                      >
-                        Register Now!
+                      <CButton color="link" className="pt-1 pl-0">
+                        Register Now
                       </CButton>
                     </Link>
-                  </div>
+                  </CForm>
                 </CCardBody>
-              </CCard>
+              </CCard> 
             </CCardGroup>
           </CCol>
         </CRow>

@@ -1,16 +1,5 @@
 import React from "react";
-import {
-  CButton,
-  CCol,
-  CContainer,
-  CInput,
-  CInputGroup,
-  CInputGroupAppend,
-  CInputGroupPrepend,
-  CInputGroupText,
-  CRow,
-} from "@coreui/react";
-import CIcon from "@coreui/icons-react";
+import { CCol, CContainer, CRow } from "@coreui/react";
 
 const Page500 = () => {
   return (
@@ -25,17 +14,6 @@ const Page500 = () => {
                 The page you are looking for is temporarily unavailable.
               </p>
             </span>
-            {/* <CInputGroup className="input-prepend">
-              <CInputGroupPrepend>
-                <CInputGroupText>
-                  <CIcon name="cil-magnifying-glass" />
-                </CInputGroupText>
-              </CInputGroupPrepend>
-              <CInput size="16" type="text" placeholder="What are you looking for?" />
-              <CInputGroupAppend>
-                <CButton color="info">Search</CButton>
-              </CInputGroupAppend>
-            </CInputGroup> */}
           </CCol>
         </CRow>
       </CContainer>

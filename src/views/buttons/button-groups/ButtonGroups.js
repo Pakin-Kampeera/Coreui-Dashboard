@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   CButton,
   CDropdown,
@@ -16,30 +16,22 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
-  CCallout
-} from '@coreui/react'
+  CCallout,
+} from "@coreui/react";
 
 const ButtonGroups = () => {
   return (
     <CRow>
       <CCol md="6">
         <CCard>
-          <CCardHeader>
-            Callout
-            
-          </CCardHeader>
+          <CCardHeader>Callout</CCardHeader>
           <CCardBody>
-            <CCallout color="primary">
-              Callout
-            </CCallout>
+            <CCallout color="primary">Callout</CCallout>
           </CCardBody>
         </CCard>
 
         <CCard>
-          <CCardHeader>
-            Button Group
-            
-          </CCardHeader>
+          <CCardHeader>Button Group</CCardHeader>
           <CCardBody>
             <CButtonGroup>
               <CButton color="secondary">Left</CButton>
@@ -115,10 +107,8 @@ const ButtonGroups = () => {
             </CButtonGroup>
           </CCardBody>
         </CCard>
-
       </CCol>
       <CCol md={6}>
-
         <CCard>
           <CCardHeader>
             Button Group
@@ -130,13 +120,15 @@ const ButtonGroups = () => {
               <CButton color="secondary">Middle</CButton>
               <CButton color="secondary">Right</CButton>
             </CButtonGroup>
-            <br /><br />
+            <br />
+            <br />
             <CButtonGroup>
               <CButton color="secondary">Left</CButton>
               <CButton color="secondary">Middle</CButton>
               <CButton color="secondary">Right</CButton>
             </CButtonGroup>
-            <br /><br />
+            <br />
+            <br />
             <CButtonGroup size="sm">
               <CButton color="secondary">Left</CButton>
               <CButton color="secondary">Middle</CButton>
@@ -190,7 +182,7 @@ const ButtonGroups = () => {
         </CCard>
       </CCol>
     </CRow>
-  )
-}
+  );
+};
 
-export default ButtonGroups
+export default ButtonGroups;
