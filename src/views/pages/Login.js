@@ -13,15 +13,18 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
+  CToast,
+  CToastBody,
+  CToaster,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import axios from "../../axios-data";
-import picture from "src/img/img1.jpg";
 
-const Login = (props) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState("Please provide email and password");
+  const [toasts, setToasts] = useState([]);
 
   const history = useHistory();
 
@@ -49,11 +52,28 @@ const Login = (props) => {
       history.replace("/dashboard");
     } catch (error) {
       setError(error.response.data.error);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
     }
   };
+
+  const addToast = () => {
+    setToasts([
+      ...toasts,
+      {
+        position: "top-right",
+        autohide: true && 2000,
+        closeButton: true,
+        fade: true,
+      },
+    ]);
+  };
+
+  const toasters = (() => {
+    return toasts.reduce((toasters, toast) => {
+      toasters[toast.position] = toasters[toast.position] || [];
+      toasters[toast.position].push(toast);
+      return toasters;
+    }, {});
+  })();
 
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
@@ -94,10 +114,12 @@ const Login = (props) => {
                         onChange={(e) => setPassword(e.target.value)}
                       />
                     </CInputGroup>
-                    <p className="text-muted">
-                      {error && <span>{error}</span>}
-                    </p>
-                    <CButton color="primary" block type="submit">
+                    <CButton
+                      color="primary"
+                      block
+                      type="submit"
+                      onClick={addToast}
+                    >
                       Login
                     </CButton>
                     <CRow>
@@ -117,9 +139,27 @@ const Login = (props) => {
                     </Link>
                   </CForm>
                 </CCardBody>
-              </CCard> 
+              </CCard>
             </CCardGroup>
           </CCol>
+
+          {Object.keys(toasters).map((toasterKey) => (
+            <CToaster position={toasterKey} key={"toaster" + toasterKey}>
+              {toasters[toasterKey].map((toast, key) => {
+                return (
+                  <CToast
+                    key={"toast" + key}
+                    show={true}
+                    autohide={toast.autohide}
+                    fade={toast.fade}
+                    color="danger"
+                  >
+                    <CToastBody>{error}</CToastBody>
+                  </CToast>
+                );
+              })}
+            </CToaster>
+          ))}
         </CRow>
       </CContainer>
     </div>
