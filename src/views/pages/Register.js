@@ -11,6 +11,9 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
+  CToast,
+  CToastBody,
+  CToaster,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import axios from "../../axios-data";
@@ -22,6 +25,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [toasts, setToasts] = useState([]);
 
   const history = useHistory();
 
@@ -33,6 +37,7 @@ const Register = () => {
 
   const registerHandler = async (e) => {
     e.preventDefault();
+
     const config = {
       header: {
         "Content-Type": "application/json",
@@ -40,27 +45,48 @@ const Register = () => {
     };
 
     if (password !== confirmPassword) {
-      setPassword("");
-      setConfirmPassword("");
-      setTimeout(() => {
-        setError("");
-      }, 5000);
-    }
-
-    try {
-      const { data } = await axios.post(
-        "api/auth/register",
-        { username, email, password },
-        config
-      );
-      history.replace("/login");
-    } catch (error) {
-      setError(error.response.data.error);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
+      // setPassword("");
+      // setConfirmPassword("");
+      setError("Password is not match");
+      // setTimeout(() => {
+      //   setError("");
+      // }, 3000);
+    } else {
+      try {
+        const { data } = await axios.post(
+          "api/auth/register",
+          { username, email, password },
+          config
+        );
+        history.replace("/login");
+      } catch (error) {
+        setError(error.response.data.error);
+        // setTimeout(() => {
+        //   setError("");
+        // }, 3000);
+      }
     }
   };
+
+  const addToast = () => {
+    setToasts([
+      ...toasts,
+      {
+        position: "top-right",
+        autohide: true && 3000,
+        closeButton: true,
+        fade: true,
+      },
+    ]);
+  };
+
+  const toasters = (() => {
+    return toasts.reduce((toasters, toast) => {
+      toasters[toast.position] = toasters[toast.position] || [];
+      toasters[toast.position].push(toast);
+      return toasters;
+    }, {});
+  })();
 
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
@@ -70,7 +96,6 @@ const Register = () => {
             <CCard className="mx-4">
               <CCardBody className="p-4">
                 <CForm onSubmit={registerHandler}>
-                  {error && <span>{error}</span>}
                   <h1>Register</h1>
                   <p className="text-muted">Create your account</p>
                   <CInputGroup className="mb-3">
@@ -83,6 +108,7 @@ const Register = () => {
                       type="text"
                       placeholder="Username"
                       autoComplete="username"
+                      required
                       onChange={(e) => setUsername(e.target.value)}
                     />
                   </CInputGroup>
@@ -110,6 +136,14 @@ const Register = () => {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </CInputGroup>
+                  {/* <CFormLabel htmlFor="validationServer01">Email</CFormLabel>
+                  <CFormControl
+                    type="text"
+                    id="validationServer01"
+                    defaultValue="Mark"
+                    valid
+                    required
+                  /> */}
                   <CInputGroup className="mb-4">
                     <CInputGroupPrepend>
                       <CInputGroupText>
@@ -123,12 +157,35 @@ const Register = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </CInputGroup>
-                  <CButton color="success" block type="submit">
+                  <CButton
+                    color="success"
+                    block
+                    type="submit"
+                    onClick={addToast}
+                  >
                     Create Account
                   </CButton>
                 </CForm>
               </CCardBody>
             </CCard>
+
+            {Object.keys(toasters).map((toasterKey) => (
+              <CToaster position={toasterKey} key={"toaster" + toasterKey}>
+                {toasters[toasterKey].map((toast, key) => {
+                  return (
+                    <CToast
+                      key={"toast" + key}
+                      show={true}
+                      autohide={toast.autohide}
+                      fade={toast.fade}
+                      color="danger"
+                    >
+                      <CToastBody>{error}</CToastBody>
+                    </CToast>
+                  );
+                })}
+              </CToaster>
+            ))}
           </CCol>
         </CRow>
       </CContainer>

@@ -7,7 +7,7 @@ const Chart = lazy(() => import("../charts/Charts"));
 const Table = lazy(() => import("../base/tables/Tables"));
 
 const Dashboard = () => {
-  const [privateData, setPrivateData] = useState("");
+  const [data, setData] = useState("");
   const [error, setError] = useState("");
 
   const history = useHistory();
@@ -25,10 +25,9 @@ const Dashboard = () => {
       };
 
       try {
-        const { data } = await axios.get("/api/private", config);
-        setPrivateData(data.data);
+        const { data } = await axios.get("/api/data", config);
+        setData(data.data);
       } catch (error) {
-        localStorage.removeItem("authToken");
         setError("You are not authorize please login");
       }
     };

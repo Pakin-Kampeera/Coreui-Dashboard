@@ -11,6 +11,9 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
+  CToast,
+  CToastBody,
+  CToaster,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import axios from "../../axios-data";
@@ -20,6 +23,7 @@ const ForgotPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [toasts, setToasts] = useState([]);
 
   const history = useHistory();
   const params = useParams();
@@ -45,7 +49,7 @@ const ForgotPassword = () => {
         setError("");
       }, 5000);
     }
-    
+
     try {
       const { data } = await axios.put(
         `api/auth/resetPassword/${params.token}`,
@@ -55,11 +59,28 @@ const ForgotPassword = () => {
       history.replace("/login");
     } catch (error) {
       setError(error.response.data.error);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
     }
   };
+
+  const addToast = () => {
+    setToasts([
+      ...toasts,
+      {
+        position: "top-right",
+        autohide: true && 3000,
+        closeButton: true,
+        fade: true,
+      },
+    ]);
+  };
+
+  const toasters = (() => {
+    return toasts.reduce((toasters, toast) => {
+      toasters[toast.position] = toasters[toast.position] || [];
+      toasters[toast.position].push(toast);
+      return toasters;
+    }, {});
+  })();
 
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
@@ -69,7 +90,6 @@ const ForgotPassword = () => {
             <CCard className="mx-4">
               <CCardBody className="p-4">
                 <CForm onSubmit={resetPasswordHandler}>
-                  {error && <span>{error}</span>}
                   <h1>Reset Password</h1>
                   <p className="text-muted">New password</p>
                   <CInputGroup className="mb-3">
@@ -98,12 +118,35 @@ const ForgotPassword = () => {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </CInputGroup>
-                  <CButton color="success" block type="submit">
+                  <CButton
+                    color="success"
+                    block
+                    type="submit"
+                    onClick={addToast}
+                  >
                     Submit
                   </CButton>
                 </CForm>
               </CCardBody>
             </CCard>
+
+            {Object.keys(toasters).map((toasterKey) => (
+              <CToaster position={toasterKey} key={"toaster" + toasterKey}>
+                {toasters[toasterKey].map((toast, key) => {
+                  return (
+                    <CToast
+                      key={"toast" + key}
+                      show={true}
+                      autohide={toast.autohide}
+                      fade={toast.fade}
+                      color="danger"
+                    >
+                      <CToastBody>{error}</CToastBody>
+                    </CToast>
+                  );
+                })}
+              </CToaster>
+            ))}
           </CCol>
         </CRow>
       </CContainer>
