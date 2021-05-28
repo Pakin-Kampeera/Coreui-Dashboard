@@ -52,16 +52,22 @@ class App extends Component {
               name="Reset Password Page"
               render={(props) => <ResetPassword {...props} />}
             />
-            {/* <Route
-              exact
-              path="/500"
-              name="Page 500"
-              render={(props) => <Page500 {...props} />}
-            /> */}
             <Route
               exact
               path="/dashboard"
-              name="Home"
+              name="Dashboard Page"
+              render={(props) => <TheLayout {...props} />}
+            />
+            <Route
+              exact
+              path="/users"
+              name="Users Page"
+              render={(props) => <TheLayout {...props} />}
+            />
+            <Route
+              exact
+              path="/settings"
+              name="Settings Page"
               render={(props) => <TheLayout {...props} />}
             />
             <Route
@@ -70,6 +76,12 @@ class App extends Component {
               name="Page 404"
               render={(props) => <Page404 {...props} />}
             />
+            {/* <Route
+              exact
+              path="/500"
+              name="Page 500"
+              render={(props) => <Page500 {...props} />}
+            /> */}
           </Switch>
         </React.Suspense>
       </BrowserRouter>
