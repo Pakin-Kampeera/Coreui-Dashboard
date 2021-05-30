@@ -43,7 +43,7 @@ const TheHeaderDropdown = () => {
         {/* <CDropdownItem divider /> */}
         <CDropdownItem onClick={logoutHandler}>
           <CIcon name="cil-lock-locked" className="mfe-2" />
-          Lock Account
+          Logout
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

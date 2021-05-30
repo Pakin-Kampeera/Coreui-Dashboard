@@ -1,6 +1,7 @@
 import React, { lazy, useEffect, useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { io } from "socket.io-client";
 
 const WidgetsDropdown = lazy(() => import("../widgets/WidgetsDropdown.js"));
 const Chart = lazy(() => import("../charts/Charts"));
@@ -11,6 +12,11 @@ const Dashboard = () => {
   const [error, setError] = useState("");
 
   const history = useHistory();
+
+  const socket = io("http://localhost:5000");
+  socket.on("connect", () => {
+    console.log(`Your socket ID is ${socket.id}`);
+  });
 
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
