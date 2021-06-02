@@ -48,6 +48,7 @@ const Login = () => {
         { email, password },
         config
       );
+      console.log(data);
       localStorage.setItem("authToken", data.token);
       history.replace("/dashboard");
     } catch (error) {
@@ -95,8 +96,8 @@ const Login = () => {
                       <CInput
                         required
                         type="email"
-                        placeholder="Username"
-                        autoComplete="username"
+                        placeholder="Email"
+                        autoComplete="Email"
                         onChange={(e) => setEmail(e.target.value)}
                       />
                     </CInputGroup>
