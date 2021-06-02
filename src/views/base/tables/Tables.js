@@ -9,25 +9,22 @@ import {
   CRow,
 } from "@coreui/react";
 
-import usersData from "../../users/UsersData";
+// import usersData from "../../users/UsersData";
 
 const getBadge = (status) => {
   switch (status) {
-    case "Active":
+    case "non-stress":
       return "success";
-    case "Inactive":
-      return "secondary";
-    case "Pending":
+    case "can't tell":
       return "warning";
-    case "Banned":
+    case "stress":
       return "danger";
-    default:
-      return "primary";
   }
 };
-const fields = ["name", "registered", "status"];
+// const fields = ["name", "registered", "status"];
+const fields = ["text", "labels", "confidence"];
 
-const Tables = () => {
+const Tables = (props) => {
   return (
     <>
       <CRow>
@@ -36,7 +33,7 @@ const Tables = () => {
             <CCardHeader>Sentences</CCardHeader>
             <CCardBody>
               <CDataTable
-                items={usersData}
+                items={props.table}
                 fields={fields}
                 hover
                 striped
@@ -45,10 +42,10 @@ const Tables = () => {
                 itemsPerPage={10}
                 pagination={{ align: "center" }}
                 scopedSlots={{
-                  status: (item) => (
+                  labels: (item) => (
                     <td>
-                      <CBadge color={getBadge(item.status)}>
-                        {item.status}
+                      <CBadge color={getBadge(item.labels)}>
+                        {item.labels}
                       </CBadge>
                     </td>
                   ),

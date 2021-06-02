@@ -8,20 +8,26 @@ const Chart = lazy(() => import("../charts/Charts"));
 const Table = lazy(() => import("../base/tables/Tables"));
 
 const Dashboard = () => {
-  const [data, setData] = useState("");
+  const [table, setTable] = useState([]);
   const [error, setError] = useState("");
 
   const history = useHistory();
-
-  const socket = io("http://localhost:2000");
-  socket.on("connect", () => {
-    console.log(`Your socket ID is ${socket.id}`);
-  });
 
   useEffect(() => {
     if (!localStorage.getItem("authToken")) {
       history.replace("/login");
     }
+
+    const socket = io("http://localhost:2000");
+    socket.on("connect", () => {
+      console.log(`Your socket ID is ${socket.id}`);
+    });
+
+    socket.on("new-History", (newHistory) => {
+      console.log(newHistory);
+      setTable((prevState) => [newHistory, ...prevState]);
+    });
+
     const fetchPrivateData = async () => {
       const config = {
         header: {
@@ -30,12 +36,12 @@ const Dashboard = () => {
         },
       };
 
-      try {
-        const { data } = await axios.get("/api/data", config);
-        setData(data.data);
-      } catch (error) {
-        setError("You are not authorize please login");
-      }
+      // try {
+      //   const { data } = await axios.get("/api/data", config);
+      //   setData(data.data);
+      // } catch (error) {
+      //   setError("You are not authorize please login");
+      // }
     };
 
     fetchPrivateData();
@@ -45,7 +51,7 @@ const Dashboard = () => {
     <>
       <WidgetsDropdown />
       <Chart />
-      <Table />
+      <Table table={table}/>
     </>
   );
 };
