@@ -56,6 +56,7 @@ const ForgotPassword = () => {
         { password },
         config
       );
+      console.log(data);
       history.replace("/login");
     } catch (error) {
       setError(error.response.data.error);

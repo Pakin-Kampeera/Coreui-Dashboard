@@ -22,6 +22,8 @@ const getBadge = (status) => {
       return "warning";
     case "stress":
       return "danger";
+    default:
+      return "";
   }
 };
 // const fields = ["name", "registered", "status"];
@@ -31,28 +33,32 @@ const Tables = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(async () => {
-    if (data.length === 0) {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      };
+  useEffect(() => {
+    async function fetchData() {
+      if (data.length === 0) {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        };
 
-      try {
-        console.log("object");
-        const { data } = await axios.get("api/data/dashboard", config);
-        setData(data.data);
-      } catch (error) {
-        console.log(error);
+        try {
+          console.log("object");
+          const { data } = await axios.get("api/data/dashboard", config);
+          setData(data.data);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        setLoading(false);
       }
-    } else {
-      setLoading(false);
+
+      if (data.length !== 0) {
+        return;
+      }
     }
 
-    if (data.length !== 0) {
-      return;
-    }
+    fetchData();
 
     const socket = io("http://localhost:2000");
 

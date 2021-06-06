@@ -32,7 +32,7 @@ const Login = () => {
     if (localStorage.getItem("authToken")) {
       history.replace("/dashboard");
     }
-  }, []);
+  });
 
   const loginHandler = async (e) => {
     e.preventDefault();

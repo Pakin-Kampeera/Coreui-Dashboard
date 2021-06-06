@@ -45,6 +45,7 @@ const ForgotPassword = () => {
         { email },
         config
       );
+      console.log(data);
       history.replace("/login");
     } catch (error) {
       setError(error.response.data.error);
