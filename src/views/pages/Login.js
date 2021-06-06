@@ -37,7 +37,7 @@ const Login = () => {
   const loginHandler = async (e) => {
     e.preventDefault();
     const config = {
-      header: {
+      headers: {
         "Content-Type": "application/json",
       },
     };
