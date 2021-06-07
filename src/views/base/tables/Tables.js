@@ -45,7 +45,7 @@ const Tables = () => {
         try {
           console.log("object");
           const { data } = await axios.get("api/data/dashboard", config);
-          setData(data.data);
+          setData(data.history);
         } catch (error) {
           console.log(error);
         }
