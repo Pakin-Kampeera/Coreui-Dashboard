@@ -24,7 +24,12 @@ const getBadge = (status) => {
   }
 };
 
-const fields = ["text", "Date", "labels", "confidence"];
+const fields = [
+  { key: "text", _style: { width: "40%" } },
+  "time",
+  { key: "labels", _style: { width: "20%" } },
+  { key: "confidence", _style: { width: "20%" } },
+];
 
 const Tables = () => {
   const [data, setData] = useState();
@@ -43,7 +48,7 @@ const Tables = () => {
           data: { history },
         } = await axios.get("api/data/dashboard", config);
         console.log(history);
-        setData(history);
+        setData(history.reverse());
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -73,9 +78,9 @@ const Tables = () => {
           <CCard>
             <CCardHeader>Sentences</CCardHeader>
             {loading ? (
-              <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                  <span class="sr-only">Loading...</span>
+              <div className="d-flex justify-content-center">
+                <div className="spinner-border" role="status">
+                  <span className="sr-only">Loading...</span>
                 </div>
               </div>
             ) : (
@@ -83,14 +88,14 @@ const Tables = () => {
                 <CDataTable
                   items={data}
                   fields={fields}
-                  hover
                   columnFilter
-                  striped
-                  bordered
+                  tableFilter
+                  itemsPerPageSelect
+                  itemsPerPage={5}
+                  hover
                   sorter
-                  size="lg"
-                  itemsPerPage={20}
                   pagination={{ align: "center" }}
+                  striped
                   scopedSlots={{
                     labels: (item) => (
                       <td>
