@@ -7,12 +7,9 @@ import {
   CCol,
   CDataTable,
   CRow,
-  CSpinner,
 } from "@coreui/react";
 import { io } from "socket.io-client";
 import axios from "../../../axios-data";
-
-// import usersData from "../../users/UsersData";
 
 const getBadge = (status) => {
   switch (status) {
@@ -23,38 +20,33 @@ const getBadge = (status) => {
     case "stress":
       return "danger";
     default:
-      return "";
+      return "primary";
   }
 };
-// const fields = ["name", "registered", "status"];
-const fields = ["text", "labels", "confidence"];
+
+const fields = ["text", "Date", "labels", "confidence"];
 
 const Tables = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      if (data.length === 0) {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      };
 
-        try {
-          console.log("object");
-          const { data } = await axios.get("api/data/dashboard", config);
-          setData(data.history);
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
+      try {
+        const {
+          data: { history },
+        } = await axios.get("api/data/dashboard", config);
+        console.log(history);
+        setData(history);
         setLoading(false);
-      }
-
-      if (data.length !== 0) {
-        return;
+      } catch (error) {
+        console.log(error);
       }
     }
 
@@ -64,7 +56,7 @@ const Tables = () => {
 
     socket.open();
 
-    socket.on("connect", () => console.log(`Your socket ID is ${socket.id}`));
+    socket.on("connect", () => console.log(`Table socket ID is ${socket.id}`));
 
     socket.on("new-History", (newHistory) => {
       console.log(newHistory);
@@ -72,7 +64,7 @@ const Tables = () => {
     });
 
     return () => socket.close();
-  }, [data]);
+  }, []);
 
   return (
     <>
@@ -81,17 +73,23 @@ const Tables = () => {
           <CCard>
             <CCardHeader>Sentences</CCardHeader>
             {loading ? (
-              <CSpinner />
+              <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
             ) : (
               <CCardBody>
                 <CDataTable
                   items={data}
                   fields={fields}
                   hover
+                  columnFilter
                   striped
                   bordered
-                  size="sm"
-                  itemsPerPage={10}
+                  sorter
+                  size="lg"
+                  itemsPerPage={20}
                   pagination={{ align: "center" }}
                   scopedSlots={{
                     labels: (item) => (

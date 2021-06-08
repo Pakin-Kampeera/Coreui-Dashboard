@@ -1,17 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CCard, CCardBody, CCardGroup, CCardHeader } from "@coreui/react";
-import {
-  CChartBar,
-  CChartPie,
-} from "@coreui/react-chartjs";
+import { CChartBar, CChartPie } from "@coreui/react-chartjs";
 
 const Charts = () => {
+  useEffect(() => {});
+
   return (
     <CCardGroup columns className="cols-2">
       <CCard>
-        <CCardHeader>
-          Average Stress Overtime
-        </CCardHeader>
+        <CCardHeader>Average Stress Overtime</CCardHeader>
         <CCardBody>
           <CChartBar
             datasets={[

@@ -7,37 +7,41 @@ import {
   CDropdownMenu,
   CDropdownItem,
   CDropdownToggle,
-  CSpinner,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import ChartLineSimple from "../charts/ChartLineSimple";
-import ChartBarSimple from "../charts/ChartBarSimple";
 import axios from "../../axios-data";
 import { io } from "socket.io-client";
 
 const WidgetsDropdown = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    users: "0",
+    comments: "0",
+    stress: "0",
+    nonStress: "0",
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      if (Object.keys(data).length === 0) {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      };
 
-        try {
-          console.log("object");
-          const { data } = await axios.get("api/data/dashboard", config);
-          console.log(data.data);
-          setData(data.data[0]);
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
+      try {
+        const {
+          data: { total },
+        } = await axios.get("api/data/dashboard", config);
+        setData({
+          users: "" + total.users,
+          comments: "" + total.comments,
+          stress: "" + total.stress,
+          nonStress: "" + total.nonStress,
+        });
         setLoading(false);
+      } catch (error) {
+        console.log(error);
       }
     }
 
@@ -47,20 +51,43 @@ const WidgetsDropdown = () => {
 
     socket.open();
 
-    socket.on("connect", () => console.log(`Your socket ID is ${socket.id}`));
+    socket.on("connect", () => console.log(`Widget socket ID is ${socket.id}`));
 
     socket.on("new-Data", (newData) => {
-      console.log(newData);
-      setData(newData.comments);
+      setData((prevState) => {
+        const users =
+          newData.users === undefined ? prevState.users : "" + newData.users;
+        const comments =
+          newData.comments === undefined
+            ? prevState.comments
+            : "" + newData.comments;
+        const stress =
+          newData.stress === undefined ? prevState.stress : "" + newData.stress;
+        const nonStress =
+          newData.nonStress === undefined
+            ? prevState.nonStress
+            : "" + newData.nonStress;
+
+        return {
+          users: users,
+          comments: comments,
+          stress: stress,
+          nonStress: nonStress,
+        };
+      });
     });
 
     return () => socket.close();
-  }, [data]);
+  }, []);
 
   return (
     <>
       {loading ? (
-        <CSpinner />
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
       ) : (
         <CRow>
           <CCol sm="6" lg="3">
@@ -69,15 +96,7 @@ const WidgetsDropdown = () => {
               header={data.users}
               text="Users"
               footerSlot={
-                <ChartLineSimple
-                  pointed
-                  className="c-chart-wrapper mt-3 mx-3"
-                  style={{ height: "70px" }}
-                  dataPoints={[65, 59, 84, 84, 51, 55, 40]}
-                  pointHoverBackgroundColor="primary"
-                  label="Members"
-                  labels="months"
-                />
+                <div className={"text-center"} style={{ height: "70px" }}></div>
               }
             >
               <CDropdown>
@@ -100,16 +119,7 @@ const WidgetsDropdown = () => {
               header={data.comments}
               text="Messages"
               footerSlot={
-                <ChartLineSimple
-                  pointed
-                  className="mt-3 mx-3"
-                  style={{ height: "70px" }}
-                  dataPoints={[1, 18, 9, 17, 34, 22, 11]}
-                  pointHoverBackgroundColor="info"
-                  options={{ elements: { line: { tension: 0.00001 } } }}
-                  label="Members"
-                  labels="months"
-                />
+                <div className={"text-center"} style={{ height: "70px" }}></div>
               }
             >
               <CDropdown>
@@ -129,19 +139,10 @@ const WidgetsDropdown = () => {
           <CCol sm="6" lg="3">
             <CWidgetDropdown
               color="gradient-warning"
-              header="9.823"
+              header={data.stress}
               text="Stress Overview"
               footerSlot={
-                <ChartLineSimple
-                  className="mt-3"
-                  style={{ height: "70px" }}
-                  backgroundColor="rgba(255,255,255,.2)"
-                  dataPoints={[78, 81, 80, 45, 34, 12, 40]}
-                  options={{ elements: { line: { borderWidth: 2.5 } } }}
-                  pointHoverBackgroundColor="warning"
-                  label="Members"
-                  labels="months"
-                />
+                <div className={"text-center"} style={{ height: "70px" }}></div>
               }
             >
               <CDropdown>
@@ -161,16 +162,10 @@ const WidgetsDropdown = () => {
           <CCol sm="6" lg="3">
             <CWidgetDropdown
               color="gradient-danger"
-              header="9.823"
+              header={data.nonStress}
               text="Non-stress Overview"
               footerSlot={
-                <ChartBarSimple
-                  className="mt-3 mx-3"
-                  style={{ height: "70px" }}
-                  backgroundColor="rgb(250, 152, 152)"
-                  label="Members"
-                  labels="months"
-                />
+                <div className={"text-center"} style={{ height: "70px" }}></div>
               }
             >
               <CDropdown>
