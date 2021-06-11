@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CButton,
   CCard,
@@ -28,12 +28,6 @@ const ForgotPassword = () => {
   const history = useHistory();
   const params = useParams();
 
-  useEffect(() => {
-    if (localStorage.getItem("authToken")) {
-      //history.push("/");
-    }
-  }, []);
-
   const resetPasswordHandler = async (e) => {
     e.preventDefault();
     const config = {
@@ -59,7 +53,7 @@ const ForgotPassword = () => {
       console.log(data);
       history.replace("/login");
     } catch (error) {
-      setError(error.response.data.error);
+      setError("Can not connect to database");
     }
   };
 
@@ -130,7 +124,6 @@ const ForgotPassword = () => {
                 </CForm>
               </CCardBody>
             </CCard>
-
             {Object.keys(toasters).map((toasterKey) => (
               <CToaster position={toasterKey} key={"toaster" + toasterKey}>
                 {toasters[toasterKey].map((toast, key) => {

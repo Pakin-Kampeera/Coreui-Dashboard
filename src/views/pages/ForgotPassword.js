@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CButton,
   CCard,
@@ -25,14 +25,19 @@ const ForgotPassword = () => {
 
   const history = useHistory();
 
-  useEffect(() => {
-    if (localStorage.getItem("authToken")) {
-      // props.history.push("/");
-    }
-  }, []);
-
   const forgotPasswordHandler = async (e) => {
     e.preventDefault();
+
+    if (e.target[0].value === "") {
+      setError("Email can not be empty");
+      return;
+    }
+
+    if (!e.target[0].value.includes("@")) {
+      setError("Please include an '@' in the email address");
+      return;
+    }
+
     const config = {
       header: {
         "Content-Type": "application/json",
@@ -48,7 +53,7 @@ const ForgotPassword = () => {
       console.log(data);
       history.replace("/login");
     } catch (error) {
-      setError(error.response.data.error);
+      setError("Can not connect to database");
     }
   };
 

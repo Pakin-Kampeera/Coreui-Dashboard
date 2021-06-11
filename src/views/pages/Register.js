@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   CButton,
   CCard,
@@ -29,14 +29,33 @@ const Register = () => {
 
   const history = useHistory();
 
-  useEffect(() => {
-    if (localStorage.getItem("authToken")) {
-      // props.history.push("/");
-    }
-  }, []);
-
   const registerHandler = async (e) => {
     e.preventDefault();
+
+    if (e.target[0].value === "") {
+      setError("Username can not be empty");
+      return;
+    }
+
+    if (e.target[1].value === "") {
+      setError("Email can not be empty");
+      return;
+    }
+
+    if (!e.target[1].value.includes("@")) {
+      setError("Please include an '@' in the email address");
+      return;
+    }
+
+    if (e.target[2].value === "") {
+      setError("Password can not be empty");
+      return;
+    }
+
+    if (e.target[3].value === "") {
+      setError("Confirm password can not be empty");
+      return;
+    }
 
     const config = {
       header: {
@@ -45,12 +64,7 @@ const Register = () => {
     };
 
     if (password !== confirmPassword) {
-      // setPassword("");
-      // setConfirmPassword("");
       setError("Password is not match");
-      // setTimeout(() => {
-      //   setError("");
-      // }, 3000);
     } else {
       try {
         const { data } = await axios.post(
@@ -59,12 +73,8 @@ const Register = () => {
           config
         );
         console.log(data);
-        history.replace("/login");
       } catch (error) {
-        setError(error.response.data.error);
-        // setTimeout(() => {
-        //   setError("");
-        // }, 3000);
+        setError("Can not connect to database");
       }
     }
   };
@@ -96,7 +106,7 @@ const Register = () => {
           <CCol md="9" lg="7" xl="6">
             <CCard className="mx-4">
               <CCardBody className="p-4">
-                <CForm onSubmit={registerHandler}>
+                <CForm onSubmit={registerHandler} noValidate>
                   <h1>Register</h1>
                   <p className="text-muted">Create your account</p>
                   <CInputGroup className="mb-3">
@@ -109,7 +119,6 @@ const Register = () => {
                       type="text"
                       placeholder="Username"
                       autoComplete="username"
-                      required
                       onChange={(e) => setUsername(e.target.value)}
                     />
                   </CInputGroup>
@@ -118,7 +127,7 @@ const Register = () => {
                       <CInputGroupText>@</CInputGroupText>
                     </CInputGroupPrepend>
                     <CInput
-                      type="text"
+                      type="email"
                       placeholder="Email"
                       autoComplete="email"
                       onChange={(e) => setEmail(e.target.value)}
@@ -137,14 +146,6 @@ const Register = () => {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </CInputGroup>
-                  {/* <CFormLabel htmlFor="validationServer01">Email</CFormLabel>
-                  <CFormControl
-                    type="text"
-                    id="validationServer01"
-                    defaultValue="Mark"
-                    valid
-                    required
-                  /> */}
                   <CInputGroup className="mb-4">
                     <CInputGroupPrepend>
                       <CInputGroupText>
@@ -169,7 +170,6 @@ const Register = () => {
                 </CForm>
               </CCardBody>
             </CCard>
-
             {Object.keys(toasters).map((toasterKey) => (
               <CToaster position={toasterKey} key={"toaster" + toasterKey}>
                 {toasters[toasterKey].map((toast, key) => {

@@ -36,6 +36,17 @@ const Login = () => {
 
   const loginHandler = async (e) => {
     e.preventDefault();
+
+    if (e.target[0].value === "") {
+      setError("Email can not be empty");
+      return;
+    }
+
+    if (!e.target[0].value.includes("@")) {
+      setError("Please include an '@' in the email address");
+      return;
+    }
+
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +63,7 @@ const Login = () => {
       localStorage.setItem("authToken", data.token);
       history.replace("/dashboard");
     } catch (error) {
-      setError(error.response.data.error);
+      setError("Can not connect to database");
     }
   };
 
@@ -84,7 +95,7 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm onSubmit={loginHandler}>
+                  <CForm onSubmit={loginHandler} noValidate>
                     <h1>Login</h1>
                     <p className="text-muted">Sign In to your account</p>
                     <CInputGroup className="mb-3">
