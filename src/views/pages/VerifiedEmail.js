@@ -8,15 +8,23 @@ const VerifiedEmail = () => {
   const params = useParams();
 
   useEffect(() => {
-    const verifiedToken = async () => {
-      const { data } = await axios.put(
-        `api/auth/verifiedEmail/${params.token}`
-      );
-      setData(data.data);
-    };
+    try {
+      try {
+        const verifiedToken = async () => {
+          const { data } = await axios.put(
+            `api/auth/verifiedEmail/${params.token}`
+          );
+          setData(data.data);
+        };
 
-    verifiedToken();
-  });
+        verifiedToken();
+      } catch (error) {
+        setData(data.data);
+      }
+    } catch (error) {
+      console.log("Can not connect to database");
+    }
+  }, [data, params.token]);
 
   return (
     <>

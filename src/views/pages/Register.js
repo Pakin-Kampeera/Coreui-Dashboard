@@ -17,7 +17,6 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import axios from "../../axios-data";
-import { useHistory } from "react-router-dom";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -27,52 +26,34 @@ const Register = () => {
   const [error, setError] = useState("");
   const [toasts, setToasts] = useState([]);
 
-  const history = useHistory();
-
   const registerHandler = async (e) => {
     e.preventDefault();
-
-    if (e.target[0].value === "") {
-      setError("Username can not be empty");
-      return;
-    }
-
-    if (e.target[1].value === "") {
-      setError("Email can not be empty");
-      return;
-    }
-
-    if (!e.target[1].value.includes("@")) {
-      setError("Please include an '@' in the email address");
-      return;
-    }
-
-    if (e.target[2].value === "") {
-      setError("Password can not be empty");
-      return;
-    }
-
-    if (e.target[3].value === "") {
-      setError("Confirm password can not be empty");
-      return;
-    }
-
-    const config = {
-      header: {
-        "Content-Type": "application/json",
-      },
-    };
 
     if (password !== confirmPassword) {
       setError("Password is not match");
     } else {
       try {
-        const { data } = await axios.post(
-          "api/auth/register",
-          { username, email, password },
-          config
-        );
-        console.log(data);
+        try {
+          const config = {
+            header: {
+              "Content-Type": "application/json",
+            },
+          };
+
+          const { data } = await axios.post(
+            "api/auth/register",
+            { username, email, password },
+            config
+          );
+          setError(data.data);
+
+          setUsername("");
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
+        } catch (error) {
+          setError(error.response.data.error);
+        }
       } catch (error) {
         setError("Can not connect to database");
       }
@@ -84,7 +65,7 @@ const Register = () => {
       ...toasts,
       {
         position: "top-right",
-        autohide: true && 3000,
+        autohide: true && 5000,
         closeButton: true,
         fade: true,
       },
@@ -116,6 +97,7 @@ const Register = () => {
                       </CInputGroupText>
                     </CInputGroupPrepend>
                     <CInput
+                      value={username}
                       type="text"
                       placeholder="Username"
                       autoComplete="username"
@@ -127,6 +109,7 @@ const Register = () => {
                       <CInputGroupText>@</CInputGroupText>
                     </CInputGroupPrepend>
                     <CInput
+                      value={email}
                       type="email"
                       placeholder="Email"
                       autoComplete="email"
@@ -140,6 +123,7 @@ const Register = () => {
                       </CInputGroupText>
                     </CInputGroupPrepend>
                     <CInput
+                      value={password}
                       type="password"
                       placeholder="Password"
                       autoComplete="new-password"
@@ -153,6 +137,7 @@ const Register = () => {
                       </CInputGroupText>
                     </CInputGroupPrepend>
                     <CInput
+                      value={confirmPassword}
                       type="password"
                       placeholder="Repeat password"
                       autoComplete="new-password"
@@ -173,17 +158,31 @@ const Register = () => {
             {Object.keys(toasters).map((toasterKey) => (
               <CToaster position={toasterKey} key={"toaster" + toasterKey}>
                 {toasters[toasterKey].map((toast, key) => {
-                  return (
-                    <CToast
-                      key={"toast" + key}
-                      show={true}
-                      autohide={toast.autohide}
-                      fade={toast.fade}
-                      color="danger"
-                    >
-                      <CToastBody>{error}</CToastBody>
-                    </CToast>
-                  );
+                  if (error === "Email has been sent, please verify") {
+                    return (
+                      <CToast
+                        key={"toast" + key}
+                        show={true}
+                        autohide={toast.autohide}
+                        fade={toast.fade}
+                        color="success"
+                      >
+                        <CToastBody>{error}</CToastBody>
+                      </CToast>
+                    );
+                  } else {
+                    return (
+                      <CToast
+                        key={"toast" + key}
+                        show={true}
+                        autohide={toast.autohide}
+                        fade={toast.fade}
+                        color="danger"
+                      >
+                        <CToastBody>{error}</CToastBody>
+                      </CToast>
+                    );
+                  }
                 })}
               </CToaster>
             ))}

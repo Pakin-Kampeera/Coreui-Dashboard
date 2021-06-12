@@ -37,31 +37,25 @@ const Login = () => {
   const loginHandler = async (e) => {
     e.preventDefault();
 
-    if (e.target[0].value === "") {
-      setError("Email can not be empty");
-      return;
-    }
-
-    if (!e.target[0].value.includes("@")) {
-      setError("Please include an '@' in the email address");
-      return;
-    }
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
     try {
-      const { data } = await axios.post(
-        "api/auth/login",
-        { email, password },
-        config
-      );
-      console.log(data);
-      localStorage.setItem("authToken", data.token);
-      history.replace("/dashboard");
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+
+        const { data } = await axios.post(
+          "api/auth/login",
+          { email, password },
+          config
+        );
+        console.log(data);
+        localStorage.setItem("authToken", data.token);
+        history.replace("/dashboard");
+      } catch (error) {
+        setError(error.response.data.error);
+      }
     } catch (error) {
       setError("Can not connect to database");
     }
@@ -72,7 +66,7 @@ const Login = () => {
       ...toasts,
       {
         position: "top-right",
-        autohide: true && 2000,
+        autohide: true && 5000,
         closeButton: true,
         fade: true,
       },

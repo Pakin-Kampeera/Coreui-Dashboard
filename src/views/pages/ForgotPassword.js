@@ -16,42 +16,33 @@ import {
   CToaster,
 } from "@coreui/react";
 import axios from "../../axios-data";
-import { useHistory } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [toasts, setToasts] = useState([]);
 
-  const history = useHistory();
-
   const forgotPasswordHandler = async (e) => {
     e.preventDefault();
 
-    if (e.target[0].value === "") {
-      setError("Email can not be empty");
-      return;
-    }
-
-    if (!e.target[0].value.includes("@")) {
-      setError("Please include an '@' in the email address");
-      return;
-    }
-
-    const config = {
-      header: {
-        "Content-Type": "application/json",
-      },
-    };
-
     try {
-      const { data } = await axios.post(
-        "api/auth/forgotPassword",
-        { email },
-        config
-      );
-      console.log(data);
-      history.replace("/login");
+      try {
+        const config = {
+          header: {
+            "Content-Type": "application/json",
+          },
+        };
+
+        const { data } = await axios.post(
+          "api/auth/forgotPassword",
+          { email },
+          config
+        );
+        setError(data.data);
+        setEmail("");
+      } catch (error) {
+        setError(error.response.data.error);
+      }
     } catch (error) {
       setError("Can not connect to database");
     }
@@ -62,7 +53,7 @@ const ForgotPassword = () => {
       ...toasts,
       {
         position: "top-right",
-        autohide: true && 3000,
+        autohide: true && 5000,
         closeButton: true,
         fade: true,
       },
@@ -96,7 +87,8 @@ const ForgotPassword = () => {
                       <CInputGroupText>@</CInputGroupText>
                     </CInputGroupPrepend>
                     <CInput
-                      type="text"
+                      value={email}
+                      type="email"
                       placeholder="Email"
                       autoComplete="email"
                       onChange={(e) => setEmail(e.target.value)}
@@ -117,17 +109,31 @@ const ForgotPassword = () => {
             {Object.keys(toasters).map((toasterKey) => (
               <CToaster position={toasterKey} key={"toaster" + toasterKey}>
                 {toasters[toasterKey].map((toast, key) => {
-                  return (
-                    <CToast
-                      key={"toast" + key}
-                      show={true}
-                      autohide={toast.autohide}
-                      fade={toast.fade}
-                      color="danger"
-                    >
-                      <CToastBody>{error}</CToastBody>
-                    </CToast>
-                  );
+                  if (error === "Email has been sent") {
+                    return (
+                      <CToast
+                        key={"toast" + key}
+                        show={true}
+                        autohide={toast.autohide}
+                        fade={toast.fade}
+                        color="success"
+                      >
+                        <CToastBody>{error}</CToastBody>
+                      </CToast>
+                    );
+                  } else {
+                    return (
+                      <CToast
+                        key={"toast" + key}
+                        show={true}
+                        autohide={toast.autohide}
+                        fade={toast.fade}
+                        color="danger"
+                      >
+                        <CToastBody>{error}</CToastBody>
+                      </CToast>
+                    );
+                  }
                 })}
               </CToaster>
             ))}

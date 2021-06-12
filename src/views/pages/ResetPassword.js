@@ -30,30 +30,31 @@ const ForgotPassword = () => {
 
   const resetPasswordHandler = async (e) => {
     e.preventDefault();
-    const config = {
-      header: {
-        "Content-Type": "application/json",
-      },
-    };
 
     if (password !== confirmPassword) {
-      setPassword("");
-      setConfirmPassword("");
-      setTimeout(() => {
-        setError("");
-      }, 5000);
-    }
+      setError("Password is not match");
+    } else {
+      try {
+        try {
+          const config = {
+            header: {
+              "Content-Type": "application/json",
+            },
+          };
 
-    try {
-      const { data } = await axios.put(
-        `api/auth/resetPassword/${params.token}`,
-        { password },
-        config
-      );
-      console.log(data);
-      history.replace("/login");
-    } catch (error) {
-      setError("Can not connect to database");
+          const { data } = await axios.put(
+            `api/auth/resetPassword/${params.token}`,
+            { password },
+            config
+          );
+          console.log(data);
+          history.replace("/login");
+        } catch (error) {
+          setError(error.response.data.error);
+        }
+      } catch (error) {
+        setError("Can not connect to database");
+      }
     }
   };
 
@@ -62,7 +63,7 @@ const ForgotPassword = () => {
       ...toasts,
       {
         position: "top-right",
-        autohide: true && 3000,
+        autohide: true && 5000,
         closeButton: true,
         fade: true,
       },
