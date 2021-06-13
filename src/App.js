@@ -66,8 +66,8 @@ class App extends Component {
             />
             <Route
               exact
-              path="/settings"
-              name="Settings Page"
+              path="/notification"
+              name="Notification Page"
               render={(props) => <TheLayout {...props} />}
             />
             <Route

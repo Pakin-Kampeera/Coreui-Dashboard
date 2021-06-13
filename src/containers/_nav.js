@@ -26,9 +26,9 @@ const _nav = [
   },
   {
     _tag: "CSidebarNavItem",
-    name: "Settings",
-    to: "/settings",
-    icon: <CIcon name="cil-settings" customClasses="c-sidebar-nav-icon" />,
+    name: "Notification",
+    to: "/notification",
+    icon: <CIcon name="cil-bell" customClasses="c-sidebar-nav-icon" />,
     badge: {
       color: "info",
     },

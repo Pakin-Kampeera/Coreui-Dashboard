@@ -20,10 +20,7 @@ const Navs = React.lazy(() => import("./views/base/navs/Navs"));
 const Paginations = React.lazy(() =>
   import("./views/base/paginations/Pagnations")
 );
-const Popovers = React.lazy(() => import("./views/base/popovers/Popovers"));
-const ProgressBar = React.lazy(() =>
-  import("./views/base/progress-bar/ProgressBar")
-);
+
 const Switches = React.lazy(() => import("./views/base/switches/Switches"));
 
 const Tooltips = React.lazy(() => import("./views/base/tooltips/Tooltips"));
@@ -48,19 +45,23 @@ const Alerts = React.lazy(() => import("./views/notifications/alerts/Alerts"));
 const Badges = React.lazy(() => import("./views/notifications/badges/Badges"));
 const Modals = React.lazy(() => import("./views/notifications/modals/Modals"));
 const Colors = React.lazy(() => import("./views/theme/colors/Colors"));
-const Typography = React.lazy(() =>
-  import("./views/theme/typography/Typography")
-);
+
 const Widgets = React.lazy(() => import("./views/widgets/Widgets"));
-const Users = React.lazy(() => import("./views/users/Users"));
+const Users = React.lazy(() => import("./views/pages/Users"));
 const User = React.lazy(() => import("./views/users/User"));
+const Notification = React.lazy(() => import("./views/pages/Notification"));
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
   { path: "/dashboard", name: "Dashboard", component: Dashboard },
+  {
+    path: "/notification",
+    name: "Notification",
+    component: Notification,
+    exact: true,
+  },
   { path: "/theme", name: "Theme", component: Colors, exact: true },
   { path: "/theme/colors", name: "Colors", component: Colors },
-  { path: "/theme/typography", name: "Typography", component: Typography },
   { path: "/base", name: "Base", component: Cards, exact: true },
   { path: "/base/breadcrumbs", name: "Breadcrumbs", component: Breadcrumbs },
   { path: "/base/cards", name: "Cards", component: Cards },
@@ -70,8 +71,6 @@ const routes = [
   { path: "/base/navbars", name: "Navbars", component: Navbars },
   { path: "/base/navs", name: "Navs", component: Navs },
   { path: "/base/paginations", name: "Paginations", component: Paginations },
-  { path: "/base/popovers", name: "Popovers", component: Popovers },
-  { path: "/base/progress-bar", name: "Progress Bar", component: ProgressBar },
   { path: "/base/switches", name: "Switches", component: Switches },
   { path: "/base/tables", name: "Tables", component: Tables },
   { path: "/base/tooltips", name: "Tooltips", component: Tooltips },
