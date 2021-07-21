@@ -1,0 +1,39 @@
+{
+    "labels": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ],
+    "datasets": [
+        {
+            "label": "Stress",
+            "data": [12, 16, 7, 5, 2, 3, 5, 2, 3, 19, 3, 5],
+            "backgroundColor": "rgba(255, 99, 132, 0.2)",
+            "borderColor": "rgba(255, 99, 132, 1)",
+            "borderWidth": 1
+        },
+        {
+            "label": "Non-stress",
+            "data": [8, 19, 3, 5, 2, 3, 3, 5, 2, 3, 12, 3],
+            "backgroundColor": "rgba(54, 162, 235, 0.2)",
+            "borderColor": "rgba(54, 162, 235, 1)",
+            "borderWidth": 1
+        },
+        {
+            "label": "Can't tell",
+            "data": [6, 7, 5, 5, 2, 3, 2, 19, 3, 5, 2, 6],
+            "backgroundColor": "rgba(255, 206, 86, 0.2)",
+            "borderColor": "rgba(255, 206, 86, 1)",
+            "borderWidth": 1
+        }
+    ]
+}

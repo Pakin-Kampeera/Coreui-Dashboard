@@ -1,92 +1,37 @@
-import React, { Component } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-import "./scss/style.scss";
+import React from 'react';
+import {Switch} from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import VerifiedEmail from './pages/VerifiedEmail';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import Main from './pages/main/Main';
+import PublicRoute from './routes/PublicRoute';
+import PrivateRoute from './routes/PrivateRoute';
 
-const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
-  </div>
-);
-
-// Containers
-const TheLayout = React.lazy(() => import("./containers/TheLayout"));
-
-// Pages
-const Login = React.lazy(() => import("./views/pages/Login"));
-const Register = React.lazy(() => import("./views/pages/Register"));
-const Page404 = React.lazy(() => import("./views/pages/Page404"));
-const ForgotPassword = React.lazy(() => import("./views/pages/ForgotPassword"));
-const ResetPassword = React.lazy(() => import("./views/pages/ResetPassword"));
-const VerifiedEmail = React.lazy(() => import("./views/pages/VerifiedEmail"));
-
-class App extends Component {
-  render() {
+function App() {
     return (
-      <BrowserRouter>
-        <React.Suspense fallback={loading}>
-          <Switch>
-            <Route exact path="/">
-              <Redirect to="/login" />
-            </Route>
-            <Route
-              exact
-              path="/login"
-              name="Login Page"
-              render={(props) => <Login {...props} />}
-            />
-            <Route
-              exact
-              path="/register"
-              name="Register Page"
-              render={(props) => <Register {...props} />}
-            />
-            <Route
-              exact
-              path="/forgotPassword"
-              name="Forgot Password Page"
-              render={(props) => <ForgotPassword {...props} />}
-            />
-            <Route
-              exact
-              path="/resetPassword/:token"
-              name="Reset Password Page"
-              render={(props) => <ResetPassword {...props} />}
-            />
-            <Route
-              exact
-              path="/dashboard"
-              name="Dashboard Page"
-              render={(props) => <TheLayout {...props} />}
-            />
-            <Route
-              exact
-              path="/users"
-              name="Users Page"
-              render={(props) => <TheLayout {...props} />}
-            />
-            <Route
-              exact
-              path="/notification"
-              name="Notification Page"
-              render={(props) => <TheLayout {...props} />}
-            />
-            <Route
-              exact
-              path="/verifiedEmail/:token"
-              name="Verified Email Page"
-              render={(props) => <VerifiedEmail {...props} />}
-            />
-            <Route
-              exact
-              path="*"
-              name="Page 404"
-              render={(props) => <Page404 {...props} />}
-            />
-          </Switch>
-        </React.Suspense>
-      </BrowserRouter>
+        <Switch>
+            <PublicRoute exact path="/login">
+                <Login />
+            </PublicRoute>
+            <PublicRoute exact path="/register">
+                <Register />
+            </PublicRoute>
+            <PublicRoute exact path="/verified-email/:token">
+                <VerifiedEmail />
+            </PublicRoute>
+            <PublicRoute exact path="/forgot-password">
+                <ForgotPassword />
+            </PublicRoute>
+            <PublicRoute exact path="/reset-password/:token">
+                <ResetPassword />
+            </PublicRoute>
+            <PrivateRoute path="/">
+                <Main />
+            </PrivateRoute>
+        </Switch>
     );
-  }
 }
 
 export default App;
