@@ -8,7 +8,7 @@ const UserDropdown = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const email = useSelector((state) => state.auth.user.email);
-    const created = useSelector((state) => state.auth.user.created);
+    const created = useSelector((state) => state.auth.user.createdAt);
 
     const [dropdownState, updateDropdownState] = useState({
         isDropdownOpen: false

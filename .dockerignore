@@ -3,3 +3,6 @@ Dockerfile
 .env
 .env.example
 .prettierrc.js
+.prettierignore
+.gitignore
+README.md

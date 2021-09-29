@@ -17,13 +17,14 @@ const VerifiedEmail = () => {
                 const data = await AuthService.verifiedEmail(params);
                 setMessage(data.message);
                 setIsVerify(data.success);
-                toast.success('🎉 Congrats!');
+                toast.success('🎉 Congrats!', {theme: 'colored'});
             } catch (error) {
                 toast.error(
                     (error.response &&
                         error.response.data &&
                         error.response.data.message) ||
-                        'Failed'
+                        'Failed',
+                    {theme: 'colored'}
                 );
             }
         };
@@ -53,7 +54,7 @@ const VerifiedEmail = () => {
     );
 
     return (
-        <div className="login-box" style={{width: '600px'}}>
+        <div className="login-box">
             <div className="card card-outline card-primary">
                 <div className="card-header text-center">
                     <Link to="/" className="h1">

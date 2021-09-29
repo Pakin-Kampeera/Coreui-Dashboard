@@ -1,17 +1,23 @@
 # Dashboard Frontend
 
-## Installation
+## Technology
+
+-   React.js + Hook (SPA framework)
+
+## Prerequisite
+
+-   Node.js
+
+## Install Dependency
 
 ```
-npm install
+yarn install
 ```
 
-## Setup environment variable
-
-1. Create new file ".env" in root directory
+\*\*\* Create Environment Variable (.env)
 
 ## Start
 
 ```
-npm run start
+yarn start
 ```

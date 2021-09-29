@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useFormik} from 'formik';
+import {Button} from '../components/index';
 import * as Yup from 'yup';
 import * as AuthService from '../services/auth';
-import {Button} from '../components/index';
 
 const ForgotPassword = () => {
     const [isAuthLoading, setAuthLoading] = useState(false);
@@ -13,7 +13,7 @@ const ForgotPassword = () => {
         try {
             setAuthLoading(true);
             const {message} = await AuthService.forgotPassword(email);
-            toast.success(message);
+            toast.success(message, {theme: 'colored'});
             setAuthLoading(false);
         } catch (error) {
             setAuthLoading(false);
@@ -21,7 +21,8 @@ const ForgotPassword = () => {
                 (error.response &&
                     error.response.data &&
                     error.response.data.message) ||
-                    'Failed'
+                    'Failed',
+                {theme: 'colored'}
             );
         }
     };
@@ -41,7 +42,7 @@ const ForgotPassword = () => {
     document.getElementById('root').classList = 'hold-transition login-page';
 
     return (
-        <div className="login-box" style={{width: '600px'}}>
+        <div className="login-box">
             <div className="card card-outline card-primary">
                 <div className="card-header text-center">
                     <Link to="/" className="h1">
@@ -58,7 +59,11 @@ const ForgotPassword = () => {
                             <div className="input-group">
                                 <input
                                     type="email"
-                                    className="form-control"
+                                    className={`form-control ${
+                                        formik.touched.email &&
+                                        formik.errors.email &&
+                                        'border border-danger'
+                                    }`}
                                     placeholder="Email"
                                     {...formik.getFieldProps('email')}
                                 />
@@ -68,11 +73,11 @@ const ForgotPassword = () => {
                                     </div>
                                 </div>
                             </div>
-                            {formik.touched.email && formik.errors.email ? (
+                            {formik.touched.email && formik.errors.email && (
                                 <div style={{color: 'red'}}>
                                     {formik.errors.email}
                                 </div>
-                            ) : null}
+                            )}
                         </div>
                         <div className="row">
                             <div className="col-12">

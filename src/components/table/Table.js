@@ -3,17 +3,18 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import {Button} from '../../components/index';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import {useSelector} from 'react-redux';
 import ToolkitProvider, {
     Search,
     CSVExport
 } from 'react-bootstrap-table2-toolkit';
 
-import data from '../../Mock/data.json';
-
 const {SearchBar} = Search;
 const {ExportCSVButton} = CSVExport;
 
 const Table = (props) => {
+    const table = useSelector((state) => state.dashboard.table);
+
     const noData = (
         <div className="d-flex justify-content-center font-weight-bold">
             <i className="fas fa-ban text-danger">
@@ -38,14 +39,10 @@ const Table = (props) => {
                         </div>
                         <div className="card-body p-0">
                             <ToolkitProvider
-                                keyField={
-                                    props.type === 'dashboard'
-                                        ? 'message'
-                                        : 'email'
-                                }
+                                keyField="_id"
                                 data={
                                     props.type === 'dashboard'
-                                        ? data
+                                        ? table
                                         : props.table
                                 }
                                 columns={props.columns}

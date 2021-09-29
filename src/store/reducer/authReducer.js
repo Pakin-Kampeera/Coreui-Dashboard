@@ -8,7 +8,7 @@ const authReducer = createSlice({
             username: null,
             email: null,
             role: null,
-            created: null
+            createdAt: null
         }
     },
     reducers: {
@@ -17,7 +17,7 @@ const authReducer = createSlice({
             state.user.username = action.payload.username;
             state.user.email = action.payload.email;
             state.user.role = action.payload.role;
-            state.user.created = action.payload.created;
+            state.user.createdAt = action.payload.createdAt;
         },
         logout(state) {
             localStorage.removeItem('token');

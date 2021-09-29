@@ -4,13 +4,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {usersAction} from '../store/reducer/userReducer';
 import {Type} from 'react-bootstrap-table2-editor';
 import {toast} from 'react-toastify';
-import axios from '../utils/axios';
 import {authAction} from '../store/reducer/authReducer';
+import axios from '../utils/axios';
 
 const Users = () => {
     const dispatch = useDispatch();
     const accounts = useSelector((state) => state.user.account);
-
     const [isLoading, setLoading] = useState(false);
     const [userRole, setUserRole] = useState([]);
     const [adminRole, setAdminRole] = useState([]);
@@ -19,35 +18,47 @@ const Users = () => {
         {
             dataField: 'username',
             text: 'Username',
-            sort: true,
             editable: false
         },
         {
             dataField: 'email',
             text: 'Email',
-            sort: true,
             editable: false
         },
         {
-            dataField: 'created',
-            text: 'Created date',
+            dataField: 'createdAt',
+            text: 'Created',
+            editable: false,
+            formatter: (cell, row) => {
+                return (
+                    <span>{new Date(row.createdAt).toLocaleDateString()}</span>
+                );
+            }
+        },
+        {
+            dataField: 'updatedAt',
+            text: 'Time',
             sort: true,
-            editable: false
+            editable: false,
+            formatter: (cell, row) => {
+                return (
+                    <span>{new Date(row.createdAt).toLocaleTimeString()}</span>
+                );
+            }
         },
         {
             dataField: 'role',
             text: 'Role',
-            sort: true,
             editor: {
                 type: Type.SELECT,
                 options: [
                     {
-                        value: 'admin',
-                        label: 'admin'
-                    },
-                    {
                         value: 'user',
                         label: 'user'
+                    },
+                    {
+                        value: 'admin',
+                        label: 'admin'
                     }
                 ]
             }
@@ -57,18 +68,22 @@ const Users = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const {data} = await axios.get('/api/data/users', {
+                const {
+                    data: {user}
+                } = await axios.get('/api/data/users', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 });
-                dispatch(usersAction.setUserRoles({account: data.user}));
+                console.log(user);
+                dispatch(usersAction.setUserRoles({account: user}));
             } catch (error) {
                 toast.error(
                     (error.response &&
                         error.response.data &&
                         error.response.data.message) ||
-                        'Failed'
+                        'Failed',
+                    {theme: 'colored'}
                 );
                 dispatch(authAction.logout());
             }
@@ -78,10 +93,6 @@ const Users = () => {
 
     const changeRoleHandler = async (e) => {
         e.preventDefault();
-
-        // console.log('User Role: ' + userRole);
-        // console.log('Admin Role: ' + adminRole);
-
         if (userRole.length !== 0 || adminRole.length !== 0) {
             try {
                 setLoading(true);
@@ -100,7 +111,7 @@ const Users = () => {
                         }
                     }
                 );
-                toast.success(data.message);
+                toast.success(data.message, {theme: 'colored'});
                 setLoading(false);
                 setUserRole([]);
                 setAdminRole([]);
@@ -109,7 +120,8 @@ const Users = () => {
                     (error.response &&
                         error.response.data &&
                         error.response.data.message) ||
-                        'Failed'
+                        'Failed',
+                    {theme: 'colored'}
                 );
                 dispatch(authAction.logout());
             }
@@ -141,7 +153,7 @@ const Users = () => {
     return (
         <div className="container-fluid">
             <Table
-                table={accounts}
+                table={JSON.parse(JSON.stringify(accounts))}
                 columns={columns}
                 type="users"
                 changeRoleHandler={changeRoleHandler}

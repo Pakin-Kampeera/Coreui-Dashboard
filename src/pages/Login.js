@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import * as AuthService from '../services/auth';
 import {useFormik} from 'formik';
-import * as Yup from 'yup';
 import {Button} from '../components/index';
 import {useDispatch} from 'react-redux';
 import {authAction} from '../store/reducer/authReducer';
+import * as AuthService from '../services/auth';
+import * as Yup from 'yup';
 
 const Login = () => {
     const [isAuthLoading, setAuthLoading] = useState(false);
@@ -21,7 +21,7 @@ const Login = () => {
             dispatch(authAction.login({}));
             document.getElementById('root').classList.remove('login-page');
             document.getElementById('root').classList.remove('hold-transition');
-            toast.success('Login success!');
+            toast.success('Login success!', {theme: 'colored'});
             setAuthLoading(false);
             history.push('/');
         } catch (error) {
@@ -30,16 +30,10 @@ const Login = () => {
                 (error.response &&
                     error.response.data &&
                     error.response.data.message) ||
-                    'Failed'
+                    'Failed',
+                {theme: 'colored'}
             );
         }
-    };
-
-    const printFormError = (formik, key) => {
-        if (formik.touched[key] && formik.errors[key]) {
-            return <div style={{color: 'red'}}>{formik.errors[key]}</div>;
-        }
-        return null;
     };
 
     const formik = useFormik({
@@ -59,7 +53,7 @@ const Login = () => {
     document.getElementById('root').classList = 'hold-transition login-page';
 
     return (
-        <div className="login-box" style={{width: '600px'}}>
+        <div className="login-box">
             <div className="card card-outline card-primary">
                 <div className="card-header text-center">
                     <Link to="/" className="h1">
@@ -75,7 +69,11 @@ const Login = () => {
                             <div className="input-group">
                                 <input
                                     type="email"
-                                    className="form-control"
+                                    className={`form-control ${
+                                        formik.touched.email &&
+                                        formik.errors.email &&
+                                        'border border-danger'
+                                    }`}
                                     placeholder="Email"
                                     {...formik.getFieldProps('email')}
                                 />
@@ -85,17 +83,21 @@ const Login = () => {
                                     </div>
                                 </div>
                             </div>
-                            {formik.touched.email && formik.errors.email ? (
+                            {formik.touched.email && formik.errors.email && (
                                 <div style={{color: 'red'}}>
                                     {formik.errors.email}
                                 </div>
-                            ) : null}
+                            )}
                         </div>
                         <div className="mb-3">
                             <div className="input-group">
                                 <input
                                     type="password"
-                                    className="form-control"
+                                    className={`form-control ${
+                                        formik.touched.password &&
+                                        formik.errors.password &&
+                                        'border border-danger'
+                                    }`}
                                     placeholder="Password"
                                     {...formik.getFieldProps('password')}
                                 />
@@ -105,9 +107,13 @@ const Login = () => {
                                     </div>
                                 </div>
                             </div>
-                            {printFormError(formik, 'password')}
+                            {formik.touched.password &&
+                                formik.errors.password && (
+                                    <div style={{color: 'red'}}>
+                                        {formik.errors.password}
+                                    </div>
+                                )}
                         </div>
-
                         <div className="row">
                             <div className="col-12">
                                 <Button

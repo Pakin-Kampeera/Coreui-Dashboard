@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import {toast} from 'react-toastify';
 import {Link, useParams, useHistory} from 'react-router-dom';
 import {useFormik} from 'formik';
-import * as Yup from 'yup';
 import {Button} from '../components/index';
+import * as Yup from 'yup';
 import * as AuthService from '../services/auth';
 
 const ResetPassword = () => {
@@ -15,7 +15,7 @@ const ResetPassword = () => {
         try {
             setAuthLoading(true);
             const {message} = await AuthService.resetPassword(params, password);
-            toast.success(message);
+            toast.success(message, {theme: 'colored'});
             setAuthLoading(false);
             history.push('/');
         } catch (error) {
@@ -24,16 +24,10 @@ const ResetPassword = () => {
                 (error.response &&
                     error.response.data &&
                     error.response.data.message) ||
-                    'Failed'
+                    'Failed',
+                {theme: 'colored'}
             );
         }
-    };
-
-    const printFormError = (formik, key) => {
-        if (formik.touched[key] && formik.errors[key]) {
-            return <div style={{color: 'red'}}>{formik.errors[key]}</div>;
-        }
-        return null;
     };
 
     const formik = useFormik({
@@ -66,7 +60,7 @@ const ResetPassword = () => {
     document.getElementById('root').classList = 'hold-transition login-page';
 
     return (
-        <div className="login-box" style={{width: '600px'}}>
+        <div className="login-box">
             <div className="card card-outline card-primary">
                 <div className="card-header text-center">
                     <Link to="/" className="h1">
@@ -83,7 +77,11 @@ const ResetPassword = () => {
                             <div className="input-group">
                                 <input
                                     type="password"
-                                    className="form-control"
+                                    className={`form-control ${
+                                        formik.touched.password &&
+                                        formik.errors.password &&
+                                        'border border-danger'
+                                    }`}
                                     placeholder="Password"
                                     {...formik.getFieldProps('password')}
                                 />
@@ -93,14 +91,22 @@ const ResetPassword = () => {
                                     </div>
                                 </div>
                             </div>
-                            {printFormError(formik, 'password')}
+                            {formik.touched.password &&
+                                formik.errors.password && (
+                                    <div style={{color: 'red'}}>
+                                        {formik.errors.password}
+                                    </div>
+                                )}
                         </div>
-
                         <div className="mb-3">
                             <div className="input-group">
                                 <input
                                     type="password"
-                                    className="form-control"
+                                    className={`form-control ${
+                                        formik.touched.passwordRetype &&
+                                        formik.errors.passwordRetype &&
+                                        'border border-danger'
+                                    }`}
                                     placeholder="Confirm password"
                                     {...formik.getFieldProps('passwordRetype')}
                                 />
@@ -110,8 +116,12 @@ const ResetPassword = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {printFormError(formik, 'passwordRetype')}
+                            {formik.touched.passwordRetype &&
+                                formik.errors.passwordRetype && (
+                                    <div style={{color: 'red'}}>
+                                        {formik.errors.passwordRetype}
+                                    </div>
+                                )}
                         </div>
                         <div className="row">
                             <div className="col-12">

@@ -1,16 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {Route, Switch} from 'react-router-dom';
+import {PageLoading} from '../../components/index';
+import {toast} from 'react-toastify';
+import {useDispatch} from 'react-redux';
+import {dashboardAction} from '../../store/reducer/dashboardReduce';
+import {authAction} from '../../store/reducer/authReducer';
 import Dashboard from '../Dashboard';
 import Header from './header/Header';
 import Footer from './footer/Footer';
 import Users from '../Users';
 import MenuSidebar from './menu-sidebar/MenuSidebar';
-import {PageLoading} from '../../components/index';
-import {toast} from 'react-toastify';
 import axios from '../../utils/axios';
-import {useDispatch} from 'react-redux';
-import {dashboardAction} from '../../store/reducer/dashboardReduce';
-import {authAction} from '../../store/reducer/authReducer';
 import AdminRoute from '../../routes/AdminRoute';
 
 const Main = () => {
@@ -35,27 +35,35 @@ const Main = () => {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 });
-                const user = data.user;
                 dispatch(dashboardAction.setWidget(data.total));
+                if (data.wordClouds) {
+                    dispatch(dashboardAction.setWordCloud(data.wordClouds));
+                }
+                if (data.history) {
+                    dispatch(dashboardAction.setTable(data.history.reverse()));
+                }
+                console.log(data.average);
+                if (data.average) {
+                    dispatch(dashboardAction.setAverage(data.average));
+                }
                 dispatch(
                     authAction.login({
-                        username: user.username,
-                        email: user.email,
-                        role: user.role,
-                        created: user.created
+                        username: data.user.username,
+                        email: data.user.email,
+                        role: data.user.role,
+                        createdAt: new Date(
+                            data.user.createdAt
+                        ).toLocaleDateString()
                     })
                 );
-                if (data.history) {
-                    dispatch(dashboardAction.setTable(data.history));
-                }
-                toast.success(data.success);
                 setIsLoading(false);
             } catch (error) {
                 toast.error(
                     (error.response &&
                         error.response.data &&
                         error.response.data.message) ||
-                        'Failed'
+                        'Failed',
+                    {theme: 'colored'}
                 );
                 dispatch(authAction.logout());
             }
